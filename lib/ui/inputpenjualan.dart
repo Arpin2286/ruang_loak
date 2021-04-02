@@ -101,8 +101,8 @@ class _InputPenjualanState extends State<InputPenjualan> {
                 children: <Widget>[
                   Expanded(
                       child: RaisedButton(
-                    color: Colors.black26,
-                    textColor: Theme.of(context).primaryColorLight,
+                    color: Colors.white30,
+                    textColor: Colors.black38,
                     child: Text(
                       "Batal",
                       textScaleFactor: 1.5,
@@ -112,7 +112,7 @@ class _InputPenjualanState extends State<InputPenjualan> {
                     },
                   )),
                   Container(
-                    width: 5,
+                    width: 15,
                   ),
                   Expanded(
                       child: RaisedButton(
