@@ -84,7 +84,7 @@ class _InputPenjualanState extends State<InputPenjualan> {
                       return showDatePicker(
                           context: context,
                           initialDate: currentValue ?? DateTime.now(),
-                          firstDate: DateTime(2021),
+                          firstDate: DateTime(1945),
                           lastDate: DateTime(2040));
                     },
                     decoration: InputDecoration(
