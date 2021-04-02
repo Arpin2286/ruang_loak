@@ -4,6 +4,7 @@ import './SemuaDaftar.dart' as SemuaDaftar;
 import './pengguna_lain.dart' as PenggunaLain;
 import './Promo.dart' as Promo;
 import './userprofile.dart' as Profil;
+import 'package:ruang_loak/ui/home.dart';
 import './notifikasi.dart';
 import './message.dart';
 
@@ -129,6 +130,16 @@ class _DashboardState extends State<Dashboard> {
                 child: Button(
                   image: "assets/3.jpg",
                   nama: "Other User",
+                ),
+              ),
+              new GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext content) => Home()));
+                },
+                child: Button(
+                  image: "assets/5.jpg",
+                  nama: "Sell Now",
                 ),
               ),
               new GestureDetector(
