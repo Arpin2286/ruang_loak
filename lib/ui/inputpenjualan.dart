@@ -17,7 +17,7 @@ class _InputPenjualanState extends State<InputPenjualan> {
   TextEditingController keteranganController = TextEditingController();
   TextEditingController jumlahController = TextEditingController();
   TextEditingController tanggalController = TextEditingController();
-  final format = DateFormat('yyyy-MM-dd');
+  final format = DateFormat('dd/MM/yyyy');
   @override
   Widget build(BuildContext context) {
     if (penjualan != null) {
