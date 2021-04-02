@@ -29,8 +29,8 @@ class _InputPenjualanState extends State<InputPenjualan> {
     return Scaffold(
       appBar: AppBar(
         title: penjualan == null
-            ? Text("Transaksi Baru")
-            : Text("Update Transaksi"),
+            ? Text("Jual Barang baru")
+            : Text("Update Barang"),
         leading: Icon(Icons.keyboard_arrow_left),
       ),
       body: Padding(
