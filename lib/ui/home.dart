@@ -32,6 +32,8 @@ class _HomeState extends State<Home> {
             var penjualan = await navigateToEntryForm(context, null);
             if (penjualan != null) {
               addPenjualan(penjualan);
+            } else {
+              isempty();
             }
           }),
     );
@@ -65,7 +67,10 @@ class _HomeState extends State<Home> {
             ),
             subtitle: Row(
               children: <Widget>[
-                Text("Rp " + this.penjualanList[index].jumlah),
+                Text(
+                  "Rp " + this.penjualanList[index].jumlah,
+                  style: TextStyle(color: Colors.red),
+                ),
                 Text(" | " + this.penjualanList[index].tanggal)
               ],
             ),
@@ -121,4 +126,10 @@ class _HomeState extends State<Home> {
       });
     });
   }
+}
+
+void isempty() {
+  Container(
+    child: Text("Data Kosong"),
+  );
 }

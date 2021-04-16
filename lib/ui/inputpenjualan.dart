@@ -43,7 +43,7 @@ class _InputPenjualanState extends State<InputPenjualan> {
                 controller: namaController,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                    labelText: "Nama",
+                    labelText: "Nama Barang",
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5))),
                 onChanged: (value) {},

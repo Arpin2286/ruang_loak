@@ -5,6 +5,7 @@ import 'pengguna_lain.dart';
 
 void main() {
   runApp(new MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "tab Bar",
       theme: ThemeData(
         primarySwatch: Colors.green,
