@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ruang_loak/Pembelian/pembelian_screen.dart';
 import 'about.dart' as about;
 import './userprofile.dart' as Profil;
 import 'package:ruang_loak/ui/home.dart';
+import 'auth/auth.dart';
 import 'detail.dart';
-import './notifikasi.dart';
-import './message.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -28,13 +28,13 @@ class _DashboardState extends State<Dashboard> {
           actions: <Widget>[
             IconButton(
                 icon: Icon(
-                  Icons.notifications_none,
+                  Icons.shopping_bag_outlined,
                   size: 30,
                   color: Colors.white,
                 ),
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return Notifikasi();
+                    return TampilanPenawaran();
                   }));
                 }),
           ],
@@ -50,7 +50,7 @@ class _DashboardState extends State<Dashboard> {
                 accountEmail: new Text("anggie.arpin.1@gmail.com"),
                 currentAccountPicture: new CircleAvatar(
                   backgroundImage: new NetworkImage(
-                      "https://media-exp1.licdn.com/dms/image/C5603AQHbZKgzo1QAyg/profile-displayphoto-shrink_200_200/0/1612793112343?e=1619049600&v=beta&t=lF-xB5VBzKwcjh9BH_Efp7Uk59YOd95Bczh7ekTPsrw"),
+                      "https://images.unsplash.com/photo-1611774812120-79d97450b31c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"),
                 ),
                 decoration: BoxDecoration(
                     image: DecorationImage(
@@ -65,18 +65,9 @@ class _DashboardState extends State<Dashboard> {
                       nama: "I Gede Anggie Suardika Arpin",
                       pekerjaan: "Mahasiswa",
                       image:
-                          "https://media-exp1.licdn.com/dms/image/C5603AQHbZKgzo1QAyg/profile-displayphoto-shrink_200_200/0/1612793112343?e=1619049600&v=beta&t=lF-xB5VBzKwcjh9BH_Efp7Uk59YOd95Bczh7ekTPsrw",
+                          "https://images.unsplash.com/photo-1611774812120-79d97450b31c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80",
                       lokasi: "Desa Kubutambahan",
                     );
-                  }));
-                },
-              ),
-              new ListTile(
-                leading: new Icon(Icons.email_outlined),
-                title: new Text("Inbox"),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return Message();
                   }));
                 },
               ),
@@ -85,7 +76,7 @@ class _DashboardState extends State<Dashboard> {
                 title: new Text("Jual Barang"),
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return Home();
+                    return InputScreen();
                   }));
                 },
               ),
@@ -95,6 +86,15 @@ class _DashboardState extends State<Dashboard> {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return about.About();
+                  }));
+                },
+              ),
+              new ListTile(
+                leading: new Icon(Icons.exit_to_app),
+                title: new Text("Logout"),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return LoginPage();
                   }));
                 },
               ),

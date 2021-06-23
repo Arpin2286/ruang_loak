@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'Pembelian/Pembelian.dart';
+import 'Pembelian/service.dart';
+
 class DetailProduk extends StatefulWidget {
   DetailProduk(
       {Key key,
@@ -33,6 +36,7 @@ class _DetailProdukState extends State<DetailProduk> {
     }
     return Scaffold(
         appBar: new AppBar(title: new Text("${widget.nama}")),
+        floatingActionButton: FloatingActionButton(onPressed: (){formdialog(context);},child: Icon(Icons.money),),
         body: new Container(
           width: double.infinity,
           child: new ListView(
@@ -124,4 +128,73 @@ class _DetailProdukState extends State<DetailProduk> {
           ),
         ));
   }
+}
+formdialog(BuildContext context) {
+  var _PembelianNameController = TextEditingController();
+  var _PembelianLokasiController = TextEditingController();
+  var _PembelianPenawaranController = TextEditingController();
+  var _pembelian = Pembelian();
+  var _pembelianService = PembelianService();
+  return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          actions: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Container(
+                  color: Colors.red,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(color: Colors.white),
+                      ))),
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Container(
+                  color: Colors.blue,
+                  child: TextButton(
+                      onPressed: () async {
+                        _pembelian.namabrg = _PembelianNameController.text;
+                        _pembelian.lokasi = _PembelianLokasiController.text;
+                        _pembelian.penawaran = _PembelianLokasiController.text;
+                        _pembelianService.SavePembelian(_pembelian);
+
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Save',
+                        style: TextStyle(color: Colors.white),
+                      ))),
+            ),
+          ],
+          title: Text('Pembelian'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  controller: _PembelianNameController,
+                  decoration: InputDecoration(
+                      hintText: "Name barang", labelText: "Name"),
+                ),
+                TextField(
+                  controller: _PembelianLokasiController,
+                  decoration:
+                  InputDecoration(hintText: 'Lokasi', labelText: 'Lokasi'),
+                ),
+                TextField(
+                  controller: _PembelianPenawaranController,
+                  decoration: InputDecoration(
+                      hintText: 'Penawran', labelText: 'Penawaran'),
+                )
+              ],
+            ),
+          ),
+        );
+      });
 }

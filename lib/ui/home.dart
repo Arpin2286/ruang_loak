@@ -1,135 +1,159 @@
-import 'package:flutter/material.dart';
-import 'package:ruang_loak/ui/inputpenjualan.dart';
-import 'package:ruang_loak/models/penjualan.dart';
-import 'package:ruang_loak/helpers/dbhelper.dart';
-import 'package:sqflite/sqflite.dart';
-import 'dart:async';
+import 'dart:convert';
 
-class Home extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'editpenjualan.dart';
+import 'inputpenjualan.dart';
+import 'package:http/http.dart' as http;
+
+class InputScreen extends StatefulWidget {
+  const InputScreen({
+    Key key,
+  }) : super(key: key);
   @override
-  _HomeState createState() => _HomeState();
+  _InputScreenState createState() => _InputScreenState();
 }
 
-class _HomeState extends State<Home> {
-  DbHelper dbHelper = DbHelper();
-  int count = 0;
-  List<Penjualan> penjualanList;
+class _InputScreenState extends State<InputScreen> {
+  final String url = "http://192.168.1.4:80/api/barang"; //Ip cek pakai Ipconfig
+
+  Future getData() async {
+    var response = await http.get(Uri.parse(url));
+    print(jsonDecode(response.body));
+    return jsonDecode(response.body);
+  }
+
+  Future deleteData(String dataId) async {
+    final String url =
+        "http://192.168.1.4:80/api/barang/" + dataId; //Ip cek pakai Ipconfig
+    var response = await http.delete(Uri.parse(url));
+
+    return jsonDecode(response.body);
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (penjualanList == null) {
-      penjualanList = List<Penjualan>();
-    }
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Penjualan Anda"),
-      ),
-      body: createListView(),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add_shopping_cart),
-          tooltip: 'Tambah Penjualan',
-          onPressed: () async {
-            var penjualan = await navigateToEntryForm(context, null);
-            if (penjualan != null) {
-              addPenjualan(penjualan);
-            } else {
-              isempty();
-            }
-          }),
-    );
-  }
-
-  Future<Penjualan> navigateToEntryForm(
-      BuildContext context, Penjualan penjualan) async {
-    var result = await Navigator.push(context,
-        MaterialPageRoute(builder: (BuildContext context) {
-      return InputPenjualan(penjualan);
-    }));
-    return result;
-  }
-
-  ListView createListView() {
-    TextStyle textStyle = Theme.of(context).textTheme.subhead;
-    return ListView.builder(
-      itemCount: count,
-      itemBuilder: (BuildContext context, int index) {
-        return Card(
-          color: Colors.white,
-          elevation: 2.0,
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.lightGreen[300],
-              child: Icon(Icons.attach_file),
-            ),
-            title: Text(
-              this.penjualanList[index].nama,
-              style: textStyle,
-            ),
-            subtitle: Row(
-              children: <Widget>[
-                Text(
-                  "Rp " + this.penjualanList[index].jumlah,
-                  style: TextStyle(color: Colors.red),
-                ),
-                Text(" | " + this.penjualanList[index].tanggal)
-              ],
-            ),
-            trailing: GestureDetector(
-              child: Icon(Icons.delete),
-              onTap: () {
-                deletePenjualan(penjualanList[index]);
-              },
-            ),
-            onTap: () async {
-              var penjualan =
-                  await navigateToEntryForm(context, this.penjualanList[index]);
-              if (penjualan != null) {
-                editPenjualan(penjualan);
-              }
-            },
+        appBar: AppBar(
+          title: Text("Daftar Penjualan"),
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.green,
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => InputPenjualan()));
+          },
+          child: Icon(Icons.add),
+        ),
+        body: Container(
+          color: Colors.lightGreen[100],
+          child: Column(
+            children: [
+              FutureBuilder(
+                  future: getData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          itemCount: snapshot.data['data'].length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              height: 180,
+                              child: Card(
+                                elevation: 5,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15.0)),
+                                      padding: EdgeInsets.all(5),
+                                      height: 120,
+                                      width: 120,
+                                      child: Image.network(
+                                        snapshot.data['data'][index]
+                                            ['image_url'],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                  snapshot.data['data'][index]
+                                                      ['namabrg'],
+                                                  style: TextStyle(
+                                                      fontSize: 20.0,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.topLeft,
+                                              child: Text(snapshot.data['data']
+                                                  [index]['deskripsi']),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                IconButton(
+                                                    icon: Icon(Icons.edit),
+                                                    color: Colors.red,
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  EditPenjualan(
+                                                                      input: snapshot
+                                                                              .data['data']
+                                                                          [
+                                                                          index])));
+                                                    }),
+                                                Text("Rp. " +
+                                                    snapshot.data['data'][index]
+                                                            ['harga']
+                                                        .toString()),
+                                                IconButton(
+                                                  icon: Icon(Icons.delete),
+                                                  color: Colors.red,
+                                                  onPressed: () {
+                                                    deleteData(snapshot
+                                                            .data['data'][index]
+                                                                ['id']
+                                                            .toString())
+                                                        .then((value) {
+                                                      setState(() {});
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(SnackBar(
+                                                              content: Text(
+                                                                  "Sudah di hapus")));
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    } else {
+                      return Text('Error');
+                    }
+                  }),
+            ],
           ),
-        );
-      },
-    );
+        ));
   }
-
-  void addPenjualan(Penjualan object) async {
-    int result = await dbHelper.insert(object);
-    if (result > 0) {
-      updateListView();
-    }
-  }
-
-  void editPenjualan(Penjualan object) async {
-    int result = await dbHelper.insert(object);
-    if (result > 0) {
-      updateListView();
-    }
-  }
-
-  void deletePenjualan(Penjualan object) async {
-    int result = await dbHelper.delete(object.id);
-    if (result > 0) {
-      updateListView();
-    }
-  }
-
-  void updateListView() {
-    final Future<Database> dbFuture = dbHelper.initDb();
-    dbFuture.then((database) {
-      Future<List<Penjualan>> penjualanListFuture = dbHelper.getPenjualanList();
-      penjualanListFuture.then((penjualanList) {
-        setState(() {
-          this.penjualanList = penjualanList;
-          this.count = penjualanList.length;
-        });
-      });
-    });
-  }
-}
-
-void isempty() {
-  Container(
-    child: Text("Data Kosong"),
-  );
 }
